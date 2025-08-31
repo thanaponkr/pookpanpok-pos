@@ -10,6 +10,9 @@
         body {
             font-family: 'Prompt', sans-serif;
             -webkit-tap-highlight-color: transparent; /* Prevent flash on mobile tap */
+            /* --- ส่วนที่เพิ่มเข้ามา --- */
+            overflow-x: hidden; /* ล็อคการเลื่อนซ้าย-ขวา */
+            touch-action: manipulation; /* ป้องกันการซูมจากการแตะสองครั้ง */
         }
         .product-grid::-webkit-scrollbar, .category-nav::-webkit-scrollbar { 
             display: none; 
