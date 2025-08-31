@@ -9,17 +9,16 @@
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            -webkit-tap-highlight-color: transparent; /* Prevent flash on mobile tap */
-            /* --- ส่วนที่เพิ่มเข้ามา --- */
-            overflow-x: hidden; /* ล็อคการเลื่อนซ้าย-ขวา */
-            touch-action: manipulation; /* ป้องกันการซูมจากการแตะสองครั้ง */
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+            touch-action: manipulation;
         }
         .product-grid::-webkit-scrollbar, .category-nav::-webkit-scrollbar { 
             display: none; 
         }
-        /* เปลี่ยนสีปุ่ม Active เป็นสีเขียวมรกต */
+        /* -- THEME COLOR -- */
         .category-btn.active {
-            background-color: #10b981; /* emerald-500 */
+            background-color: #22c55e; /* green-500 */
             color: white;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
@@ -31,8 +30,7 @@
 
         <!-- Header -->
         <header class="bg-white shadow-sm p-4 sticky top-0 z-20 flex items-center justify-center">
-            <!-- เปลี่ยนสีตัวอักษรหัวเรื่อง -->
-            <h1 class="text-xl font-bold text-emerald-500">ปุ๊ ปั่น ปอก POS</h1>
+            <h1 class="text-xl font-bold text-green-600">ปุ๊ ปั่น ปอก POS</h1>
         </header>
 
         <!-- Category Filters -->
@@ -48,8 +46,7 @@
                 <!-- Products will be rendered here -->
             </div>
              <div id="loading-spinner" class="text-center p-10 col-span-2">
-                <!-- เปลี่ยนสีไอคอนโหลด -->
-                <svg class="animate-spin h-8 w-8 text-emerald-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg class="animate-spin h-8 w-8 text-green-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
@@ -58,8 +55,7 @@
         </main>
         
         <!-- Cart Summary Footer -->
-        <!-- เปลี่ยนสีเส้นขอบด้านบน -->
-        <footer id="cart-summary-bar" class="bg-white p-3 border-t-2 border-emerald-400 sticky bottom-0 z-20 transition-transform duration-300 translate-y-full shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] cursor-pointer">
+        <footer id="cart-summary-bar" class="bg-white p-3 border-t-2 border-green-400 sticky bottom-0 z-20 transition-transform duration-300 translate-y-full shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] cursor-pointer">
             <div class="flex justify-between items-center">
                 <div>
                     <p><span id="cart-item-count" class="font-bold">0</span> รายการ</p>
@@ -190,14 +186,12 @@
 
             productListEl.innerHTML = filteredProducts.map(product => `
                 <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col cursor-pointer add-to-cart-card" data-id="${product.id}">
-                    <img src="${product.imageUrl}" alt="${product.name}" class="w-full h-32 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/300x200/10b981/FFFFFF?text=${encodeURIComponent(product.name)}';">
+                    <img src="${product.imageUrl}" alt="${product.name}" class="w-full h-32 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/300x200/22c55e/FFFFFF?text=${encodeURIComponent(product.name)}';">
                     <div class="p-3 flex-grow flex flex-col">
                         <h3 class="font-semibold text-md flex-grow">${product.name}</h3>
                         <div class="flex justify-between items-center mt-2">
-                            <!-- เปลี่ยนสีราคา -->
-                            <span class="text-lg font-bold text-emerald-600">${product.price}฿</span>
-                             <!-- เปลี่ยนสีปุ่มบวก -->
-                             <div class="bg-white border-2 border-emerald-500 text-emerald-500 rounded-full w-9 h-9 flex items-center justify-center text-2xl font-bold shadow-sm">
+                            <span class="text-lg font-bold text-orange-500">${product.price}฿</span>
+                             <div class="bg-white border-2 border-green-500 text-green-500 rounded-full w-9 h-9 flex items-center justify-center text-2xl font-bold shadow-sm">
                                 +
                             </div>
                         </div>
