@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Summer Juice POS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,7 +11,9 @@
             font-family: 'Kanit', sans-serif;
             -webkit-tap-highlight-color: transparent; /* ป้องกันแสงกระพริบตอนกดบนมือถือ */
         }
-        .product-grid::-webkit-scrollbar { display: none; } /* ซ่อน scrollbar */
+        .product-grid::-webkit-scrollbar, .category-nav::-webkit-scrollbar { 
+            display: none; 
+        }
         .category-btn.active {
             background-color: #f97316;
             color: white;
@@ -29,7 +31,7 @@
         </header>
 
         <!-- Category Filters -->
-        <nav class="bg-white p-3 sticky top-[68px] z-20 overflow-x-auto whitespace-nowrap">
+        <nav class="bg-white p-3 sticky top-[68px] z-20 overflow-x-auto whitespace-nowrap category-nav">
             <div id="category-filters" class="flex space-x-2">
                 <!-- Category buttons will be rendered here -->
             </div>
@@ -50,53 +52,73 @@
         </main>
         
         <!-- Cart Summary Footer -->
-        <footer id="cart-summary" class="bg-white p-3 border-t-2 border-orange-400 sticky bottom-0 z-20 transition-transform duration-300 translate-y-full shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <footer id="cart-summary-bar" class="bg-white p-3 border-t-2 border-orange-400 sticky bottom-0 z-20 transition-transform duration-300 translate-y-full shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] cursor-pointer">
             <div class="flex justify-between items-center">
                 <div>
                     <p><span id="cart-item-count" class="font-bold">0</span> รายการ</p>
                     <p class="text-lg font-bold">รวม: <span id="cart-total-price">0</span> บาท</p>
                 </div>
-                <button id="confirm-sale-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg disabled:bg-gray-400">
-                    ยืนยันการขาย
-                </button>
+                <div class="text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
+                    <span class="text-sm">ดูรายการ</span>
+                </div>
             </div>
         </footer>
 
-        <!-- Sale Success Modal -->
-        <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-            <div class="bg-white rounded-lg p-8 text-center shadow-xl transform transition-all scale-95 opacity-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h2 class="text-2xl font-bold mb-2">บันทึกสำเร็จ!</h2>
-                <p>ระบบได้บันทึกการขายเรียบร้อยแล้ว</p>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-end hidden z-50 transition-opacity duration-300">
+        <div id="cart-modal-content" class="bg-white w-full max-w-md mx-auto rounded-t-2xl p-4 transform transition-transform duration-300 translate-y-full">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold">รายการสั่งซื้อ</h2>
+                <button id="close-cart-btn" class="text-gray-500 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div id="cart-items-list" class="max-h-[40vh] overflow-y-auto space-y-3 pr-2">
+                <!-- Cart items will be rendered here -->
+            </div>
+            <div class="mt-4 pt-4 border-t">
+                 <div class="flex justify-between items-center text-xl font-bold mb-4">
+                    <span>รวมทั้งหมด:</span>
+                    <span id="modal-total-price">0 บาท</span>
+                </div>
+                <button id="confirm-sale-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 w-full rounded-lg shadow-lg disabled:bg-gray-400">
+                    ยืนยันการขาย
+                </button>
             </div>
         </div>
-
     </div>
+
+
+    <!-- Sale Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-8 text-center shadow-xl transform transition-all scale-95 opacity-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h2 class="text-2xl font-bold mb-2">บันทึกสำเร็จ!</h2>
+            <p>ระบบได้บันทึกการขายเรียบร้อยแล้ว</p>
+        </div>
+    </div>
+
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ===================================================================================
-        // ===================================================================================
-        //
-        //       ขั้นตอนที่ 3: นำ "กุญแจ" (firebaseConfig) ที่คัดลอกไว้ มาวางที่นี่
-        //       
-        // ===================================================================================
-        // ===================================================================================
-const firebaseConfig = {
-  apiKey: "AIzaSyBZtaSQgK0_w278Niws7MkKXIrGDUEZR9A",
-  authDomain: "pookpanpok-pos.firebaseapp.com",
-  projectId: "pookpanpok-pos",
-  storageBucket: "pookpanpok-pos.firebasestorage.app",
-  messagingSenderId: "987254399017",
-  appId: "1:987254399017:web:5431f669ef133bdbf0fc38"
-};
+        const firebaseConfig = {
+          apiKey: "AIzaSyBZtaSQgK0_w278Niws7MkKXIrGDUEZR9A",
+          authDomain: "pookpanpok-pos.firebaseapp.com",
+          projectId: "pookpanpok-pos",
+          storageBucket: "pookpanpok-pos.appspot.com",
+          messagingSenderId: "987254399017",
+          appId: "1:987254399017:web:5431f669ef133bdbf0fc38"
+        };
         // ===================================================================================
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -104,23 +126,29 @@ const firebaseConfig = {
         let cart = {}; 
         let currentCategory = 'ทั้งหมด';
 
+        // Element Selectors
         const productListEl = document.getElementById('product-list');
         const categoryFiltersEl = document.getElementById('category-filters');
         const loadingSpinnerEl = document.getElementById('loading-spinner');
-        const cartSummaryEl = document.getElementById('cart-summary');
+        const cartSummaryBar = document.getElementById('cart-summary-bar');
         const cartItemCountEl = document.getElementById('cart-item-count');
         const cartTotalPriceEl = document.getElementById('cart-total-price');
         const confirmSaleBtn = document.getElementById('confirm-sale-btn');
         const successModal = document.getElementById('success-modal');
         const successModalContent = successModal.querySelector('div');
+        const cartModal = document.getElementById('cart-modal');
+        const cartModalContent = document.getElementById('cart-modal-content');
+        const closeCartBtn = document.getElementById('close-cart-btn');
+        const cartItemsListEl = document.getElementById('cart-items-list');
+        const modalTotalPriceEl = document.getElementById('modal-total-price');
+        
+        // --- Functions ---
 
         async function fetchProducts() {
             try {
-                // สร้าง query เพื่อดึงข้อมูลและเรียงตาม 'sortOrder'
                 const productsRef = collection(db, "products");
                 const q = query(productsRef, orderBy("sortOrder"));
                 const querySnapshot = await getDocs(q);
-
                 allProducts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 loadingSpinnerEl.style.display = 'none';
                 renderCategories();
@@ -142,8 +170,7 @@ const firebaseConfig = {
             document.querySelectorAll('.category-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     currentCategory = btn.dataset.category;
-                    document.querySelector('.category-btn.active')?.classList.remove('active');
-                    btn.classList.add('active');
+                    renderCategories(); // Re-render to update active state
                     renderProducts();
                 });
             });
@@ -153,11 +180,6 @@ const firebaseConfig = {
             const filteredProducts = currentCategory === 'ทั้งหมด' 
                 ? allProducts 
                 : allProducts.filter(p => p.category === currentCategory);
-
-            if(filteredProducts.length === 0 && allProducts.length > 0){
-                productListEl.innerHTML = `<p class="text-gray-500 text-center col-span-2">ไม่มีสินค้าในหมวดหมู่นี้</p>`;
-                return;
-            }
 
             productListEl.innerHTML = filteredProducts.map(product => `
                 <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col cursor-pointer add-to-cart-card" data-id="${product.id}">
@@ -195,28 +217,64 @@ const firebaseConfig = {
                     quantity: 1
                 };
             }
-            updateCartSummary();
+            renderCart();
         }
 
-        function updateCartSummary() {
+        function removeFromCart(productId) {
+            if (!cart[productId]) return;
+
+            if (cart[productId].quantity > 1) {
+                cart[productId].quantity--;
+            } else {
+                delete cart[productId];
+            }
+            renderCart();
+        }
+        
+        function renderCart() {
             const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
             const totalPrice = Object.values(cart).reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
+            // Update Summary Bar
             if (totalItems > 0) {
-                cartSummaryEl.classList.remove('translate-y-full');
+                cartSummaryBar.classList.remove('translate-y-full');
                 confirmSaleBtn.disabled = false;
             } else {
-                cartSummaryEl.classList.add('translate-y-full');
+                cartSummaryBar.classList.add('translate-y-full');
                  confirmSaleBtn.disabled = true;
+                closeCartModal();
             }
-
             cartItemCountEl.textContent = totalItems;
             cartTotalPriceEl.textContent = totalPrice.toLocaleString('th-TH');
+
+            // Update Modal
+            modalTotalPriceEl.textContent = `${totalPrice.toLocaleString('th-TH')} บาท`;
+            if (totalItems === 0) {
+                 cartItemsListEl.innerHTML = `<p class="text-gray-500 text-center py-4">ยังไม่มีสินค้าในตะกร้า</p>`;
+            } else {
+                cartItemsListEl.innerHTML = Object.entries(cart).map(([id, item]) => `
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold">${item.name}</p>
+                            <p class="text-sm text-gray-600">${item.price} บาท</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button class="bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center text-lg font-bold remove-from-cart-btn" data-id="${id}">-</button>
+                            <span class="font-bold w-5 text-center">${item.quantity}</span>
+                            <button class="bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center text-lg font-bold add-to-cart-btn" data-id="${id}">+</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Re-attach event listeners for modal buttons
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => btn.addEventListener('click', () => addToCart(btn.dataset.id)));
+            document.querySelectorAll('.remove-from-cart-btn').forEach(btn => btn.addEventListener('click', () => removeFromCart(btn.dataset.id)));
         }
 
         function showSuccessModal() {
             successModal.classList.remove('hidden');
-            setTimeout(() => { // Add a little delay for the animation to kick in
+            setTimeout(() => {
                 successModalContent.classList.remove('scale-95', 'opacity-0');
             }, 10);
 
@@ -247,20 +305,48 @@ const firebaseConfig = {
             try {
                 await addDoc(collection(db, "sales"), saleData);
                 showSuccessModal();
+                closeCartModal();
                 cart = {};
-                updateCartSummary();
+                renderCart();
             } catch (error) {
                 console.error("Error writing document: ", error);
                 alert("เกิดข้อผิดพลาดในการบันทึกการขาย!");
             } finally {
                 confirmSaleBtn.textContent = 'ยืนยันการขาย';
-                // The button state is handled by updateCartSummary
+                // Button state is handled by renderCart()
             }
         }
+        
+        function openCartModal() {
+            if (Object.keys(cart).length === 0) return;
+            cartModal.classList.remove('hidden');
+            setTimeout(() => { // Delay for transition
+                cartModal.classList.remove('opacity-0');
+                cartModalContent.classList.remove('translate-y-full');
+            }, 10);
+        }
 
+        function closeCartModal() {
+            cartModal.classList.add('opacity-0');
+            cartModalContent.classList.add('translate-y-full');
+            setTimeout(() => { // Delay for transition
+                cartModal.classList.add('hidden');
+            }, 300);
+        }
+
+        // --- Event Listeners ---
+        cartSummaryBar.addEventListener('click', openCartModal);
+        closeCartBtn.addEventListener('click', closeCartModal);
+        cartModal.addEventListener('click', (e) => {
+             if (e.target === cartModal) { // Close if clicking on the background
+                closeCartModal();
+            }
+        });
         confirmSaleBtn.addEventListener('click', handleConfirmSale);
 
+        // --- Initial Load ---
         fetchProducts();
+
     </script>
 </body>
 </html>
