@@ -262,15 +262,15 @@
                  cartItemsListEl.innerHTML = `<p class="text-gray-500 text-center py-4">ยังไม่มีสินค้าในตะกร้า</p>`;
             } else {
                 cartItemsListEl.innerHTML = Object.entries(cart).map(([id, item]) => `
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between py-2">
                         <div>
                             <p class="font-semibold">${item.name}</p>
                             <p class="text-sm text-gray-600">${item.price} บาท</p>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <button class="bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center text-lg font-bold remove-from-cart-btn" data-id="${id}">-</button>
-                            <span class="font-bold w-5 text-center">${item.quantity}</span>
-                            <button class="bg-gray-200 rounded-full w-7 h-7 flex items-center justify-center text-lg font-bold add-to-cart-btn" data-id="${id}">+</button>
+                        <div class="flex items-center space-x-2">
+                            <button class="bg-gray-200 rounded-full w-10 h-10 flex items-center justify-center text-2xl font-bold remove-from-cart-btn" data-id="${id}">-</button>
+                            <span class="font-bold w-8 text-center text-lg">${item.quantity}</span>
+                            <button class="bg-gray-200 rounded-full w-10 h-10 flex items-center justify-center text-2xl font-bold add-to-cart-btn" data-id="${id}">+</button>
                         </div>
                     </div>
                 `).join('');
